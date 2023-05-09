@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(924, 807)
+        MainWindow.resize(924, 808)
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -222,7 +222,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page_7, u"QPlainTextEdit")
         self.page_8 = QWidget()
         self.page_8.setObjectName(u"page_8")
-        self.page_8.setGeometry(QRect(0, 0, 437, 510))
+        self.page_8.setGeometry(QRect(0, 0, 437, 511))
         self.verticalLayout_7 = QVBoxLayout(self.page_8)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.calendarWidget = QCalendarWidget(self.page_8)
@@ -778,7 +778,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_14.addLayout(self.verticalLayout_12)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_3)
 
