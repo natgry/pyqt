@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>924</width>
-    <height>808</height>
+    <height>767</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -386,7 +386,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <x>0</x>
                <y>0</y>
                <width>437</width>
-               <height>511</height>
+               <height>470</height>
               </rect>
              </property>
              <attribute name="label">
@@ -1688,8 +1688,29 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <string>Управление маневровыми двигателями</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_14">
+                  <property name="spacing">
+                   <number>6</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>9</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>9</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>9</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>9</number>
+                  </property>
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <property name="spacing">
+                     <number>6</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QPushButton" name="pushButton_5">
                       <property name="minimumSize">
