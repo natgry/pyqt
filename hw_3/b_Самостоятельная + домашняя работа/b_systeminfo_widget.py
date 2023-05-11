@@ -81,7 +81,12 @@ class SystemInfoWindow(QtWidgets.QWidget):
 
         :return: None
         """
-        self.thread.delay = int(self.lineEditDelay.text())
+        delay = self.lineEditDelay.text()
+        if delay:
+            delay = int(delay)
+        else:
+            delay = 1
+        self.thread.delay = delay
 
     def updateCpuRamInfo(self) -> None:
         """
