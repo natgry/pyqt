@@ -13,7 +13,7 @@
 """
 import time
 
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets
 
 from a_threads import SystemInfo
 
@@ -30,43 +30,39 @@ class SystemInfoWindow(QtWidgets.QWidget):
 
     def initUI(self) -> None:
         """
-        Complete UI initialization
+        Инициализация фронтенда.
         :return: None
         """
         self.setWindowTitle("SystemInfoWindow")
 
-        self.lineEditDelay = QtWidgets.QLineEdit()
-        self.lineEditDelay.setPlaceholderText("Enter delay")
+        self.spinBoxDelay = QtWidgets.QSpinBox()
+        self.spinBoxDelay.setMinimum(1)
+        labelSpinBox = QtWidgets.QLabel("Время задержки потока: ")
 
-        labelCpu = QtWidgets.QLabel("CPU >>>:")
+        labelCpu = QtWidgets.QLabel("CPU >>>")
         self.plainTextEditCpu = QtWidgets.QPlainTextEdit()
 
-        labelRam = QtWidgets.QLabel("RAM >>>: ")
+        labelRam = QtWidgets.QLabel("RAM >>>")
         self.plainTextEditRam = QtWidgets.QPlainTextEdit()
 
-        layout_cpu = QtWidgets.QHBoxLayout()
-        layout_cpu.addWidget(labelCpu)
-        layout_cpu.addWidget(self.plainTextEditCpu)
-
-        layout_ram = QtWidgets.QHBoxLayout()
-        layout_ram.addWidget(labelRam)
-        layout_ram.addWidget(self.plainTextEditRam)
-
         layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.lineEditDelay)
-        layout.addLayout(layout_cpu)
-        layout.addLayout(layout_ram)
+        layout.addWidget(labelSpinBox)
+        layout.addWidget(self.spinBoxDelay)
+        layout.addWidget(labelCpu)
+        layout.addWidget(self.plainTextEditCpu)
+        layout.addWidget(labelRam)
+        layout.addWidget(self.plainTextEditRam)
         self.setLayout(layout)
 
-    def initSignals(self):
+    def initSignals(self) -> None:
         """
         Инициализация сигналов
         :return: None
         """
-        self.lineEditDelay.textChanged.connect(self.lineEditDelayTextChanged)
+        self.spinBoxDelay.textChanged.connect(self.spinBoxDelayTextChanged)
         self.thread.systemInfoReceived.connect(self.updateCpuRamInfo)
 
-    def initThread(self):
+    def initThread(self) -> None:
         """
         Инициализация потоков
 
@@ -75,18 +71,13 @@ class SystemInfoWindow(QtWidgets.QWidget):
         self.thread = SystemInfo()
         self.thread.start()
 
-    def lineEditDelayTextChanged(self) -> None:
+    def spinBoxDelayTextChanged(self) -> None:
         """
-        Обработка сигнала textChanged для поля lineEditDelay
+        Обработка сигнала textChanged для поля spinBoxDelay
 
         :return: None
         """
-        delay = self.lineEditDelay.text()
-        if delay:
-            delay = int(delay)
-        else:
-            delay = 1
-        self.thread.delay = delay
+        self.thread.delay = self.spinBoxDelay.value()
 
     def updateCpuRamInfo(self) -> None:
         """
@@ -95,7 +86,7 @@ class SystemInfoWindow(QtWidgets.QWidget):
         :return: None
         """
         self.plainTextEditCpu.appendPlainText(f"{time.ctime()} >>> CPU:{self.thread.systemSignal[0]}")
-        self.plainTextEditRam.appendPlainText(f"{time.ctime()} >>> CPU:{self.thread.systemSignal[1]}")
+        self.plainTextEditRam.appendPlainText(f"{time.ctime()} >>> RAM:{self.thread.systemSignal[1]}")
 
 
 if __name__ == '__main__':

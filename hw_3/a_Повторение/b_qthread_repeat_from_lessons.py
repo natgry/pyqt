@@ -15,8 +15,8 @@
 """
 import time
 
-from PySide6 import QtWidgets, QtCore
 import requests
+from PySide6 import QtWidgets, QtCore
 
 
 class Window(QtWidgets.QWidget):
@@ -24,62 +24,94 @@ class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.initUI()
+        self.initUi()
         self.initThread()
         self.initSignals()
 
-    def initUI(self):
+    def initUi(self) -> None:
         """
 
         :return:
         """
-        self.lineEditUrl = QtWidgets.QLineEdit()
-        self.lineEditUrl.setPlaceholderText("Enter URL: ")
+
+        self.lineEditURL = QtWidgets.QLineEdit()
+        self.lineEditURL.setPlaceholderText("Введите URL")
+
         self.plainTextEdit = QtWidgets.QPlainTextEdit()
         self.plainTextEdit.setReadOnly(True)
+
+        labelSpinBox = QtWidgets.QLabel("Задержка обновления: ")
         self.spinBoxDelay = QtWidgets.QSpinBox()
         self.spinBoxDelay.setMinimum(1)
-        labelSpinBox = QtWidgets.QLabel("Delay: ")
-        self.pushBtnThradHandle = QtWidgets.QPushButton("Start")
-        self.pushBtnThradHandle.setCheckable(True)
+
+        self.pushButtonThreadHandle = QtWidgets.QPushButton("Запуск")
+        self.pushButtonThreadHandle.setCheckable(True)
 
         layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.lineEditUrl)
+        layout.addWidget(self.lineEditURL)
         layout.addWidget(self.plainTextEdit)
         layout.addWidget(labelSpinBox)
         layout.addWidget(self.spinBoxDelay)
-        layout.addWidget(self.pushBtnThradHandle)
+        layout.addWidget(self.pushButtonThreadHandle)
+
         self.setLayout(layout)
 
-    def initThread(self):
+    def initThread(self) -> None:
+        """
+
+        :return:
+        """
+
         self.thread = RequestsThread()
 
-    def initSignals(self):
+    def initSignals(self) -> None:
+        """
+
+        :return:
+        """
+
         self.thread.responsed.connect(self.updateSiteStatus)
         self.thread.finished.connect(self.threadFinished)
-        self.pushBtnThradHandle.clicked.connect(self.handleThread())
-        self.spinBoxDelay.valueChanged.connect(self.setUrlDelay)
+        self.spinBoxDelay.valueChanged.connect(self.setURLDelay)
+        self.pushButtonThreadHandle.clicked.connect(self.handleThread)
 
     def updateSiteStatus(self, status_code: int):
-        self.plainTextEdit.appendPlainText(f"{time.ctime()} >>> status code:{status_code}")
+        """
+
+        :param status_code:
+        :return:
+        """
+
+        self.plainTextEdit.appendPlainText(f'{time.ctime()} >>> status code: {status_code}')
 
     def handleThread(self):
-        btn_status = self.pushBtnThradHandle.isChecked()
-        if self.thread.isRunning() or self.thread.status or not btn_status:
+        """
+
+        :return:
+        """
+
+        button_status = self.pushButtonThreadHandle.isChecked()
+
+        if self.thread.isRunning() or self.thread.status or not button_status:
             self.thread.status = False
-            self.pushBtnThradHandle.setText("Start")
+            self.pushButtonThreadHandle.setText("Запуск")
         else:
-            self.thread.url = self.lineEditUrl.text()
+            self.thread.url = self.lineEditURL.text()
             self.thread.delay = self.spinBoxDelay.value()
             self.thread.start()
-            self.pushBtnThradHandle.setText("Stop")
+            self.pushButtonThreadHandle.setText("Остановка")
 
     def threadFinished(self):
-        self.pushBtnThradHandle.setChecked(False)
+        self.pushButtonThreadHandle.setChecked(False)
+        self.pushButtonThreadHandle.setText("Запуск")
 
-    def setUrlDelay(self):
-        self.thread.delay = self.spinBoxDelay.text()
-        self.pushBtnThradHandle.setText("Start")
+    def setURLDelay(self):
+        """
+
+        :return:
+        """
+
+        self.thread.delay = self.spinBoxDelay.value()
 
 
 class RequestsThread(QtCore.QThread):
@@ -92,45 +124,49 @@ class RequestsThread(QtCore.QThread):
         self.__delay = 2
 
     @property
-    def status(self):
+    def status(self) -> bool:
         return self.__status
 
     @status.setter
     def status(self, value: bool) -> None:
         if not isinstance(value, bool):
             raise ValueError
+
         self.__status = value
 
     @property
-    def delay(self):
+    def delay(self) -> int:
         return self.__delay
 
     @delay.setter
     def delay(self, value: int) -> None:
         if not isinstance(value, int):
             raise ValueError
+
         self.__delay = value
 
-    @property
-    def url(self):
-        return self.__url
-
-    @url.setter
-    def url(self, value: str) -> None:
-        if not isinstance(value, str):
-            raise ValueError
-        self.__url = value
+    # @property
+    # def url(self) -> str:
+    #     return self.__url
+    #
+    # @url.setter
+    # def url(self, value: str) -> None:
+    #     if not isinstance(value, str):
+    #         raise ValueError
+    #
+    #     self.__url = value
 
     def run(self) -> None:
         if not self.url:
             return
 
         self.status = True
+
         while self.status:
             try:
                 response = requests.get(self.url)
                 status_code = response.status_code
-            except requests.exceptions:
+            except requests.exceptions.SSLError:
                 status_code = -1
 
             self.responsed.emit(status_code)
@@ -140,18 +176,13 @@ class RequestsThread(QtCore.QThread):
 if __name__ == "__main__":
     app = QtWidgets.QApplication()
 
+    # rt = RequestsThread()
+    # rt.url = "https://googles.ru"
+    # rt.responsed.connect(lambda data_from_thread: print(data_from_thread))
+    #
+    # rt.start()
+
     window = Window()
     window.show()
 
     app.exec()
-
-#  another way to check code in console only
-# if __name__ == "__main__":
-#     app = QtWidgets.QApplication()
-#
-#     rt = RequestsThread()
-#     rt.url = "https://google.ru"
-#     rt.responsed.connect(lambda data_from_thread: print(data_from_thread))
-#     rt.start()
-#
-#     app.exec()
