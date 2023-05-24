@@ -47,8 +47,6 @@ class Window(QtWidgets.QWidget):
         self.ui.comboBox.insertItem(3, 'dec')
         if settings:
             self.ui.comboBox.setCurrentIndex(int(settings[0]))
-            #self.lcdNumberSetMode()
-
             lcdNumber = int(settings[1])
             self.ui.lcdNumber.display(lcdNumber)
             self.ui.horizontalSlider.setValue(lcdNumber)
