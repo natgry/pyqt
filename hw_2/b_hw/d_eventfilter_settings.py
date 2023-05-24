@@ -47,13 +47,13 @@ class Window(QtWidgets.QWidget):
         self.ui.comboBox.insertItem(3, 'dec')
         if settings:
             self.ui.comboBox.setCurrentIndex(int(settings[0]))
-            self.lcdNumberSetMode()
+            #self.lcdNumberSetMode()
 
             lcdNumber = int(settings[1])
             self.ui.lcdNumber.display(lcdNumber)
             self.ui.horizontalSlider.setValue(lcdNumber)
             self.ui.dial.setValue(lcdNumber)
-
+        self.lcdNumberSetMode()
         self.ui.dial.installEventFilter(self)
 
     def initSignals(self):
@@ -64,9 +64,9 @@ class Window(QtWidgets.QWidget):
         """
         self.ui.horizontalSlider.valueChanged.connect(self.onHorizontalSliderValueChanged)
         self.ui.comboBox.currentIndexChanged.connect(self.onComboBoxCurrentIndexChanged)
-        self.ui.dial.valueChanged.connect(self.dialValueChanged)
+        self.ui.dial.valueChanged.connect(self.onDialValueChanged)
 
-    def dialValueChanged(self) -> None:
+    def onDialValueChanged(self) -> None:
         """
         Обработка сигнала valueChanged для QDial dial
 
@@ -129,16 +129,21 @@ class Window(QtWidgets.QWidget):
         :param event: QtCore.QEvent
         :return: bool
         """
-        if event.type() == QtCore.QEvent.Type.KeyPress:
+        if source == self.ui.dial and event.type() == QtCore.QEvent.Type.KeyPress:
+            current_value = self.ui.dial.value()
+            new_value = current_value
+
             if event.key() == QtCore.Qt.Key.Key_Plus:
-                print(f"Old dial value: {self.ui.dial.value()}")
-                self.ui.dial.setValue(self.ui.dial.value() + 1)
-                print(f"New dial value: {self.ui.dial.value()}")
+                new_value = current_value + 1
+
             if event.key() == QtCore.Qt.Key.Key_Minus:
-                print(f"Old dial value: {self.ui.dial.value()}")
-                self.ui.dial.setValue(self.ui.dial.value() - 1)
-                print(f"New dial value: {self.ui.dial.value()}")
-        return super(Window, self).eventFilter(source, event)
+                new_value = current_value - 1
+
+            if current_value != new_value:
+                self.ui.dial.setValue(new_value)
+                print(f"Old dial value: {current_value}, New dial value: {self.ui.dial.value()}")
+
+        return super().eventFilter(source, event)
 
 
 if __name__ == "__main__":
