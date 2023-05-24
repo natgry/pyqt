@@ -114,7 +114,7 @@ class Window(QtWidgets.QWidget):
         """
         Обработка событий закрытия окна
 
-        :param event: QtGui.QResizeEvent
+        :param event: QtGui.QCloseEvent
         :return: None
         """
         self.qSettings.setValue(
