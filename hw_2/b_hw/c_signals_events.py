@@ -52,15 +52,28 @@ class Window(QtWidgets.QWidget):
 
         :return: None
         """
-        self.ui.pushButtonGetData.clicked.connect(self.print_data)
-        self.ui.pushButtonCenter.clicked.connect(self.moveCenter)
-        self.ui.pushButtonLB.clicked.connect(self.moveLeftBottom)
-        self.ui.pushButtonLT.clicked.connect(self.moveLeftTop)
-        self.ui.pushButtonRT.clicked.connect(self.moveRightTop)
-        self.ui.pushButtonRB.clicked.connect(self.moveRightBottom)
-        self.ui.pushButtonMoveCoords.clicked.connect(self.moveCoords)
+        self.ui.pushButtonGetData.clicked.connect(self.onPushButtonGetDataClicked)
+        self.ui.pushButtonCenter.clicked.connect(self.onPushButtonCenterClicked)
+        self.ui.pushButtonLB.clicked.connect(self.onPushButtonLBClicked)
+        self.ui.pushButtonLT.clicked.connect(self.onPushButtonLTClicked)
+        self.ui.pushButtonRT.clicked.connect(self.onPushButtonRTClicked)
+        self.ui.pushButtonRB.clicked.connect(self.onPushButtonRBClicked)
+        self.ui.pushButtonMoveCoords.clicked.connect(self.onPushButtonMoveCoordsClicked)
 
-    def print_data(self):
+    def onPushButtonGetDataClicked(self) -> None:
+        """
+        Обработка сигнала clicked для кнопки pushButtonGetData
+
+        :return: None
+        """
+        self.print_data()
+
+    def print_data(self) -> None:
+        """
+        Получение параметров экрана и вывод параметров в plainTextEdit
+
+        :return: None
+        """
         data = []
         data_in_time = f"Текущее время: {time.ctime()}"
         data.append(data_in_time)
@@ -96,7 +109,7 @@ class Window(QtWidgets.QWidget):
         text = "\n".join(data)
         self.ui.plainTextEdit.setPlainText(text)
 
-    def moveCoords(self) -> None:
+    def onPushButtonMoveCoordsClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonMoveCoords
 
@@ -106,7 +119,7 @@ class Window(QtWidgets.QWidget):
         y = self.ui.spinBoxY.value()
         self.move(x, y)
 
-    def moveCenter(self) -> None:
+    def onPushButtonCenterClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonCenter
 
@@ -118,7 +131,7 @@ class Window(QtWidgets.QWidget):
         frameGeom.moveCenter(center)
         self.move(frameGeom.topLeft())
 
-    def moveLeftTop(self) -> None:
+    def onPushButtonLTClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonLT
 
@@ -127,7 +140,7 @@ class Window(QtWidgets.QWidget):
 
         self.move(self.screenGeom.topLeft())
 
-    def moveLeftBottom(self) -> None:
+    def onPushButtonLBClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonLB
 
@@ -136,7 +149,7 @@ class Window(QtWidgets.QWidget):
 
         self.move(0, self.screenGeom.bottom() - self.height())
 
-    def moveRightTop(self) -> None:
+    def onPushButtonRTClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonRT
 
@@ -145,7 +158,7 @@ class Window(QtWidgets.QWidget):
 
         self.move(self.screenGeom.right() - self.width(), 0)
 
-    def moveRightBottom(self) -> None:
+    def onPushButtonRBClicked(self) -> None:
         """
         Обработка сигнала clicked для кнопки pushButtonRB
 
