@@ -66,13 +66,15 @@ class Window(QtWidgets.QWidget):
 
         :return: None
         """
-        self.print_data()
+        data = self.get_data()
+        text = "\n".join(data)
+        self.ui.plainTextEdit.setPlainText(text)
 
-    def print_data(self) -> None:
+    def get_data(self) -> list:
         """
-        Получение параметров экрана и вывод параметров в plainTextEdit
+        Получение параметров экрана
 
-        :return: None
+        :return: список параметров экрана
         """
         data = []
         data_in_time = f"Текущее время: {time.ctime()}"
@@ -106,8 +108,7 @@ class Window(QtWidgets.QWidget):
                 f"{self.isHidden()}/{self.isMaximized()}/{self.isActiveWindow()}/{self.isVisible()}"
         data.append(state)
 
-        text = "\n".join(data)
-        self.ui.plainTextEdit.setPlainText(text)
+        return data
 
     def onPushButtonMoveCoordsClicked(self) -> None:
         """
