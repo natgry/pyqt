@@ -118,6 +118,7 @@ class Window(QtWidgets.QWidget):
         self.qSettings.setValue(
             "settings_list", [self.ui.comboBox.currentIndex(), self.ui.lcdNumber.value()]
         )
+        self.thread().terminate()
 
     def eventFilter(self, source: QtCore.QObject, event: QtCore.QEvent) -> bool:
         """
